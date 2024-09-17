@@ -62,6 +62,10 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.coil.compose)
     implementation(libs.androidx.navigation.compose)
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation(libs.androidx.runtime.livedata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

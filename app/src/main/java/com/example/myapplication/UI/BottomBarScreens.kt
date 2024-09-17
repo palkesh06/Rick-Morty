@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.ui.theme
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
