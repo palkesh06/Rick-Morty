@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.myapplication.UI.navigationScreens.CharactersScreen
-import com.example.myapplication.UI.navigationScreens.EpisodesScreen
-import com.example.myapplication.UI.navigationScreens.LocationsScreen
+import com.example.myapplication.ui.navigationScreens.CharactersScreen
+import com.example.myapplication.ui.navigationScreens.EpisodesScreen
+import com.example.myapplication.ui.navigationScreens.LocationsScreen
 
 @Composable
 fun BottomNavGraph(navController: NavHostController, paddingValues: PaddingValues) {

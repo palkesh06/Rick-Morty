@@ -1,4 +1,4 @@
-package com.example.myapplication.UI.navigationScreens
+package com.example.myapplication.ui.navigationScreens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,8 +32,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.Data.dataclass.episodes.Result
-import com.example.myapplication.UI.viewModel.EpisodesViewModel
-import com.example.myapplication.UI.viewModelFactory.EpisodesViewModelFactory
+import com.example.myapplication.ui.viewModel.EpisodesViewModel
+import com.example.myapplication.ui.viewModelFactory.EpisodesViewModelFactory
 
 @Composable
 fun EpisodesScreen(modifier: Modifier = Modifier) {
@@ -56,8 +56,6 @@ fun EpisodesScreen(modifier: Modifier = Modifier) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
-                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
                 .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -123,35 +121,54 @@ fun EpisodeCard(episode: Result, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp),
-        elevation = CardDefaults.cardElevation(8.dp),
-        shape = MaterialTheme.shapes.medium
+        elevation = CardDefaults.cardElevation(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
+        ),
+        shape = MaterialTheme.shapes.large
     ) {
-        Column(
+        Box(
             modifier = Modifier
+                .background(
+                    brush = androidx.compose.ui.graphics.Brush.verticalGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+                        )
+                    )
+                )
                 .padding(16.dp)
         ) {
-            Text(
-                text = "Episode ${episode.episode}",
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
-            Text(
-                text = episode.name,
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
-            Text(
-                text = "Air Date: ${episode.air_date}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray
-            )
+            Column {
+                Text(
+                    text = "Episode ${episode.episode}",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    ),
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                androidx.compose.material3.Divider(
+                    color = MaterialTheme.colorScheme.primary,
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+                Text(
+                    text = episode.name,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                Text(
+                    text = "Air Date: ${episode.air_date}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
         }
     }
 }
+
 
 @Composable
 @Preview(showBackground = true)

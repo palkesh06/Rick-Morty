@@ -1,4 +1,4 @@
-package com.example.myapplication.UI.navigationScreens
+package com.example.myapplication.ui.navigationScreens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,8 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.myapplication.Data.dataclass.characters.Result
-import com.example.myapplication.UI.viewModel.CharactersViewModel
-import com.example.myapplication.UI.viewModelFactory.CharactersViewModelFactory
+import com.example.myapplication.ui.viewModel.CharactersViewModel
+import com.example.myapplication.ui.viewModelFactory.CharactersViewModelFactory
 
 @Composable
 fun CharactersScreen(modifier: Modifier = Modifier) {
@@ -58,11 +59,20 @@ fun CharactersScreen(modifier: Modifier = Modifier) {
             .padding(8.dp)
     ) {
         // Header
-        Text(
-            text = "Characters", style = MaterialTheme.typography.titleLarge.copy(
-                fontWeight = FontWeight.Bold, color = Color.Black
-            ), modifier = Modifier.fillMaxWidth()
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Characters",
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            )
+        }
 
         // Show loading spinner if data is being loaded
         if (loading) {

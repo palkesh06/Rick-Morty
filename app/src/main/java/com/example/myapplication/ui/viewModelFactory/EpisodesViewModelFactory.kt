@@ -1,11 +1,11 @@
-package com.example.myapplication.UI.viewModelFactory
+package com.example.myapplication.ui.viewModelFactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.Data.Repository.EpisodesRepository
 import com.example.myapplication.Data.Retrofit.ApiInterface
 import com.example.myapplication.Data.Retrofit.RetrofitInstance
-import com.example.myapplication.UI.viewModel.EpisodesViewModel
+import com.example.myapplication.ui.viewModel.EpisodesViewModel
 
 class EpisodesViewModelFactory(
     private val api: ApiInterface = RetrofitInstance.api,

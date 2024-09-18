@@ -1,4 +1,4 @@
-package com.example.myapplication.UI.navigationScreens
+package com.example.myapplication.ui.navigationScreens
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
