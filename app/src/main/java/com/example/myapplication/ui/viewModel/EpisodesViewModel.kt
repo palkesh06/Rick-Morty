@@ -28,20 +28,31 @@ class EpisodesViewModel(private val repository: EpisodesRepository) : ViewModel(
         loadEpisodes()
     }
 
-    private fun loadEpisodes() {
+    var currentPage = 1
+    var isLastPage = false
+
+    fun loadEpisodes() {
+        if ( _loading.value == true || isLastPage) return
         viewModelScope.launch {
             _loading.value = true
             val result: Result<Episodes?> = withContext(Dispatchers.IO) {
-                repository.getAllEpisodes()
+                repository.getAllEpisodes(currentPage)
             }
             if (result.isSuccess ) {
-                result.getOrNull()?.let {
-                    _episodes.value = it
+                result.getOrNull()?.let { data ->
+                    val currentList = _episodes.value?.results?.toMutableList() ?: mutableListOf()
+                    currentList.addAll(data.results)
+                    _episodes.value = Episodes(
+                        data.info,
+                        currentList
+                    )
+                    isLastPage =  currentPage == data.info.pages
                 }
             } else {
                 _error.value = result.exceptionOrNull()?.message ?: "Unknown error"
             }
             _loading.value = false
+            currentPage++
         }
     }
 }

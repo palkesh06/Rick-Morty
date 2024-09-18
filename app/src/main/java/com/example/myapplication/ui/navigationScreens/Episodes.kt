@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
@@ -21,11 +22,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,7 +72,7 @@ fun EpisodesScreen(modifier: Modifier = Modifier) {
         }
 
         // Show loading spinner if data is being loaded
-        if (loading) {
+        if (loading && viewModel.currentPage == 1) {
             Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
@@ -103,13 +106,44 @@ fun EpisodesScreen(modifier: Modifier = Modifier) {
         }
 
         if (episodes != null) {
-            LazyColumn {
+
+            val listState = rememberLazyListState()
+
+            // observe list scrolling
+            val reachedBottom: Boolean by remember {
+                derivedStateOf {
+                    val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
+                    lastVisibleItem?.index != 0 && lastVisibleItem?.index == listState.layoutInfo.totalItemsCount -1
+                }
+            }
+
+            // load more if scrolled to bottom
+            LaunchedEffect(reachedBottom) {
+                if (reachedBottom && !viewModel.isLastPage) viewModel.loadEpisodes()
+            }
+
+            // create lazyColumn
+            LazyColumn(
+                state = listState
+            ) {
                 episodes?.let {
                     items(it.results) { episode ->
                         EpisodeCard( episode, modifier)
                     }
                 }
 
+                if (loading) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+                }
             }
         }
     }

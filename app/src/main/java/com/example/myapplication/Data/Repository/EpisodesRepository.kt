@@ -5,9 +5,9 @@ import com.example.myapplication.Data.dataclass.episodes.Episodes
 
 class EpisodesRepository(private val api: ApiInterface) {
 
-    suspend fun getAllEpisodes(): Result<Episodes> {
+    suspend fun getAllEpisodes(page: Int): Result<Episodes> {
         return try {
-            val response = api.getAllEpisodes()
+            val response = api.getAllEpisodes(page)
             if (response.isSuccessful) {
                 val body = response.body()
                 if (body != null) {
