@@ -1,5 +1,6 @@
 package com.example.myapplication.UI.navigationScreens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -51,11 +53,22 @@ fun EpisodesScreen(modifier: Modifier = Modifier) {
             .padding(8.dp)
     ) {
         // Header
-        Text(
-            text = "Episodes", style = MaterialTheme.typography.titleLarge.copy(
-                fontWeight = FontWeight.Bold, color = Color.Black
-            ), modifier = Modifier.fillMaxWidth()
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Episodes",
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            )
+        }
 
         // Show loading spinner if data is being loaded
         if (loading) {
@@ -69,7 +82,8 @@ fun EpisodesScreen(modifier: Modifier = Modifier) {
             Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(16.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Warning,
@@ -81,17 +95,20 @@ fun EpisodesScreen(modifier: Modifier = Modifier) {
                     Text(
                         text = error ?: "Unknown error",
                         color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodyLarge
+                        style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        textAlign = TextAlign.Center
                     )
                 }
             }
             return
         }
+
         if (episodes != null) {
             LazyColumn {
-                episodes?.let { episodes ->
-                    items(episodes.results) { episode ->
-                        EpisodeCard(episode = episode, modifier)
+                episodes?.let {
+                    items(it.results) { episode ->
+                        EpisodeCard( episode, modifier)
                     }
                 }
 
@@ -101,12 +118,13 @@ fun EpisodesScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun EpisodeCard(episode : Result,  modifier: Modifier = Modifier) {
+fun EpisodeCard(episode: Result, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(8.dp),
+        shape = MaterialTheme.shapes.medium
     ) {
         Column(
             modifier = Modifier
@@ -117,7 +135,7 @@ fun EpisodeCard(episode : Result,  modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.Bold
                 ),
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
             Text(
@@ -127,14 +145,13 @@ fun EpisodeCard(episode : Result,  modifier: Modifier = Modifier) {
                 modifier = Modifier.padding(bottom = 4.dp)
             )
             Text(
-                text = "Air Date: "+episode.air_date,
+                text = "Air Date: ${episode.air_date}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Gray
             )
         }
     }
 }
-
 
 @Composable
 @Preview(showBackground = true)
