@@ -1,11 +1,11 @@
-package com.example.myapplication.ui.theme.viewModelFactory
+package com.example.myapplication.UI.viewModelFactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.Data.Retrofit.ApiInterface
 import com.example.myapplication.Data.Repository.CharactersRepository
 import com.example.myapplication.Data.Retrofit.RetrofitInstance
-import com.example.myapplication.ui.theme.viewModel.CharactersViewModel
+import com.example.myapplication.UI.viewModel.CharactersViewModel
 
 class CharactersViewModelFactory(
     private val api: ApiInterface = RetrofitInstance.api,

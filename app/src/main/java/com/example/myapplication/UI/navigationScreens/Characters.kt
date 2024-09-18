@@ -29,8 +29,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,8 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.myapplication.Data.dataclass.characters.Result
-import com.example.myapplication.ui.theme.viewModel.CharactersViewModel
-import com.example.myapplication.ui.theme.viewModelFactory.CharactersViewModelFactory
+import com.example.myapplication.UI.viewModel.CharactersViewModel
+import com.example.myapplication.UI.viewModelFactory.CharactersViewModelFactory
 
 @Composable
 fun CharactersScreen(modifier: Modifier = Modifier) {
@@ -61,7 +59,7 @@ fun CharactersScreen(modifier: Modifier = Modifier) {
     ) {
         // Header
         Text(
-            text = "CHARACTERS", style = MaterialTheme.typography.titleLarge.copy(
+            text = "Characters", style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold, color = Color.Black
             ), modifier = Modifier.fillMaxWidth()
         )
@@ -158,6 +156,6 @@ fun CharacterCard(character: Result) {
 
 @Composable
 @Preview(showBackground = true)
-fun PreviewScreen(modifier: Modifier = Modifier) {
+fun PreviewCharactersScreen(modifier: Modifier = Modifier) {
     CharactersScreen()
 }
