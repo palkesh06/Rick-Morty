@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.Data.Repository.CharactersRepository
 import com.example.myapplication.Data.dataclass.characters.Characters
-import com.example.myapplication.Data.dataclass.episodes.Episodes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
