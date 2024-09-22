@@ -107,6 +107,7 @@ fun EpisodesScreen(modifier: Modifier = Modifier) {
 
         if (episodes != null) {
 
+            // store state of list.
             val listState = rememberLazyListState()
 
             // observe list scrolling

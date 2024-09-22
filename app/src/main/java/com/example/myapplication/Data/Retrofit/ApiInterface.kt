@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface ApiInterface {
 
     @GET("character")
-    suspend fun getAllCharacters(): Response<Characters>
+    suspend fun getAllCharacters(@Query("page") page: Int): Response<Characters>
 
     @GET("episode")
     suspend fun getAllEpisodes(@Query("page") page: Int): Response<Episodes>

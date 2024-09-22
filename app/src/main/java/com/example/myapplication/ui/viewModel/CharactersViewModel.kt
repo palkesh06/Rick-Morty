@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.Data.Repository.CharactersRepository
 import com.example.myapplication.Data.dataclass.characters.Characters
+import com.example.myapplication.Data.dataclass.episodes.Episodes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,20 +30,31 @@ class CharactersViewModel(private val repository: CharactersRepository) : ViewMo
         loadCharacters()
     }
 
-    private fun loadCharacters() {
+    var currentPage = 1
+    var isLastPage = false
+
+    fun loadCharacters() {
+        if ( _loading.value == true || isLastPage) return
         viewModelScope.launch {
             _loading.value = true
             val result: Result<Characters?> = withContext(Dispatchers.IO) {
-                repository.getAllCharacters()
+                repository.getAllCharacters(currentPage)
             }
             if (result.isSuccess ) {
-                result.getOrNull()?.let {
-                    _characters.value = it
+                result.getOrNull()?.let { data ->
+                    val currentList = _characters.value?.results?.toMutableList() ?: mutableListOf()
+                    currentList.addAll(data.results)
+                    _characters.value = Characters(
+                        data.info,
+                        currentList
+                    )
+                    isLastPage =  currentPage == data.info.pages
                 }
             } else {
                 _error.value = result.exceptionOrNull()?.message ?: "Unknown error"
             }
             _loading.value = false
+            currentPage++
         }
     }
 }

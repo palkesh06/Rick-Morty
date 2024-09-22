@@ -9,6 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -17,6 +18,8 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
@@ -25,8 +28,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,8 +67,7 @@ fun CharactersScreen(modifier: Modifier = Modifier) {
         // Header
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+                .fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -75,7 +80,7 @@ fun CharactersScreen(modifier: Modifier = Modifier) {
         }
 
         // Show loading spinner if data is being loaded
-        if (loading) {
+        if (loading && viewModel.currentPage == 1) {
             Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
@@ -107,17 +112,47 @@ fun CharactersScreen(modifier: Modifier = Modifier) {
         }
 
         if (characters != null) {
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 128.dp),
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            // store state of list
+            val listState = rememberLazyGridState()
+
+            // observe list scrolling
+            val reachedBottom: Boolean by remember {
+                derivedStateOf {
+                    val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
+                    lastVisibleItem?.index != 0 && lastVisibleItem?.index == listState.layoutInfo.totalItemsCount -1
+                }
+            }
+
+            // load more if scrolled to bottom
+            LaunchedEffect(reachedBottom) {
+                if (reachedBottom && !viewModel.isLastPage) viewModel.loadCharacters()
+            }
+
+            Column(
+                modifier = Modifier.padding(bottom = if (loading) 32.dp else 0.dp)
             ) {
-                characters?.let {
-                    items(it.results) { character ->
-                        CharacterCard(character)
+                LazyVerticalGrid(
+                    state = listState,
+                    columns = GridCells.Adaptive(minSize = 128.dp),
+                    modifier = modifier
+                        .fillMaxSize()
+                        .padding(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    characters?.let {
+                        items(it.results) { character ->
+                            CharacterCard(character)
+                        }
+                    }
+                }
+                if (loading) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.BottomCenter
+                    ) {
+                        CircularProgressIndicator()
                     }
                 }
             }

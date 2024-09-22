@@ -5,9 +5,9 @@ import com.example.myapplication.Data.dataclass.characters.Characters
 
 class CharactersRepository(private val api: ApiInterface) {
 
-    suspend fun getAllCharacters() : Result<Characters>{
+    suspend fun getAllCharacters(page : Int) : Result<Characters>{
          return try {
-             val response = api.getAllCharacters()
+             val response = api.getAllCharacters(page)
              if (response.isSuccessful) {
                  val body = response.body()
                  if (body != null) {
