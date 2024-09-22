@@ -1,7 +1,9 @@
 package com.example.myapplication.Data.dataclass.characters
 
+import java.util.Date
+
 data class Result(
-    val created: String,
+    val created: Date,
     val episode: List<String>,
     val gender: String,
     val id: Int,
