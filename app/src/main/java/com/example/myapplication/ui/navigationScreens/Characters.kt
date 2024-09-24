@@ -161,7 +161,7 @@ fun CharactersScreen(modifier: Modifier = Modifier) {
                 ) {
                     LazyVerticalGrid(
                         state = listState,
-                        columns = GridCells.Adaptive(minSize = 128.dp),
+                        columns = GridCells.Adaptive(minSize = 100.dp),
                         modifier = modifier
                             .fillMaxSize()
                             .padding(8.dp),
@@ -198,14 +198,11 @@ fun CharactersScreen(modifier: Modifier = Modifier) {
 fun CharacterCard(character: Result, onClick: () ->Unit) {
     Card(
         modifier = Modifier
-            .padding(8.dp)
-            .wrapContentSize()
+            .padding(6.dp)
             .clickable(enabled = true, onClick = onClick)
     ) {
         Column(
             modifier = Modifier
-                .wrapContentWidth()
-                .wrapContentHeight()
                 .padding(8.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -214,7 +211,7 @@ fun CharacterCard(character: Result, onClick: () ->Unit) {
                 painter = rememberAsyncImagePainter(character.image),
                 contentDescription = "Character image",
                 modifier = Modifier
-                    .size(128.dp)
+                    .size(80.dp)
             )
             Text(
                 text = character.name,
@@ -225,10 +222,15 @@ fun CharacterCard(character: Result, onClick: () ->Unit) {
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = "Status: " + character.status,
-                modifier = Modifier.padding(top = 8.dp),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodySmall
+                text = character.status,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = when (character.status) {
+                        "Alive" -> Color.Green
+                        "Dead" -> Color.Red
+                        else -> Color.Gray
+                    }
+                ),
+                modifier = Modifier.padding(bottom = 8.dp)
             )
         }
     }
